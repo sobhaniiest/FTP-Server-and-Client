@@ -1,4 +1,4 @@
-//Inro - 12/02/2019
+//Inro - 13/02/2019
 
 #include <stdio.h>
 #include <unistd.h>
@@ -217,17 +217,29 @@ int main()
 {
 
 		struct sockaddr_in ccmd, cdata;
-
+		char addr[20] = "127.0.0.10";
 		//cmd
+		//scanf(" %s",addr);
 		bzero((char *)&ccmd, sizeof(ccmd));
 		ccmd.sin_family = AF_INET;
-		ccmd.sin_addr.s_addr = inet_addr("127.0.0.10");
+		//ccmd.sin_addr.s_addr = inet_addr("10.32.5.249");
+		if(!inet_pton(AF_INET,addr,&(ccmd.sin_addr)))
+		{
+			puts("address conversion error");
+			return 0;
+		}
 		ccmd.sin_port = htons(PCC);
 
 		//data
+		//scanf(" %s",addr);
 		bzero((char *)&cdata, sizeof(cdata));
 		cdata.sin_family = AF_INET;
-		cdata.sin_addr.s_addr = inet_addr("127.0.0.10");
+		//cdata.sin_addr.s_addr = inet_addr("10.32.5.249");
+		if(!inet_pton(AF_INET,addr,&(cdata.sin_addr)))
+		{
+			puts("address conversion error");
+			return 0;
+		}
 		cdata.sin_port = htons(PCF);
 
 		int cmd,data;

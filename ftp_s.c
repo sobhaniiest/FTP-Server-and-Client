@@ -1,4 +1,4 @@
-//Inro - 12/02/2019
+//Inro - 13/02/2019
 
 #include <stdio.h>
 #include <unistd.h>
@@ -18,11 +18,11 @@
 // Client PORT
 #define PCC 2024
 #define PCF 2025
-
 #define SIZE 100
 
 char str[SIZE];
 FILE *fp;
+int cd_flag=0;
 
 void fun(int newcmd, int newrand)
 {
@@ -155,7 +155,30 @@ void fun(int newcmd, int newrand)
 			}
 			else if(!strcmp(com,"cd"))
 			{
+				if(cd_flag==1)
+				{
+					
+					strcpy(str,"Error");
+		  			write(newrand, str, sizeof(str));
+					continue;
+				}
+				
 				chdir(file);
+				system("pwd>temppwd.txt");
+				char string[20];
+				FILE* fp=fopen("temppwd.txt","r");
+				fscanf(fp,"%s",string);
+				int count=0;
+				for(int i=0;i<strlen(string);i++)
+				{
+					if(string[i]=='/')
+						count++;
+				}
+
+				if(count == 2)
+					cd_flag=1;
+				
+
 				bzero(str, sizeof(str));
 				strcpy(str,"Directory is changed");
 		  		write(newrand, str, sizeof(str));
@@ -193,23 +216,42 @@ void fun(int newcmd, int newrand)
 int main()
 {
 		struct sockaddr_in scmd, sdata, srand;
+		char addr[20] = "127.0.0.10";
 
 		//cmd
 		bzero((char *)&scmd, sizeof(scmd));
 		scmd.sin_family = AF_INET;
-		scmd.sin_addr.s_addr = inet_addr("127.0.0.10");
+		if(!inet_pton(AF_INET,addr,&(scmd.sin_addr)))
+		{
+			puts("address conversion error");
+			return 0;
+		}
+		//scmd.sin_addr.s_addr = inet_addr("10.32.5.249");
+		//scmd.sin_addr.s_addr = INADDR_ANY;
 		scmd.sin_port = htons(PSC);
-
+		
 		//file
 		bzero((char *)&sdata, sizeof(sdata));
 		sdata.sin_family = AF_INET;
-		sdata.sin_addr.s_addr = inet_addr("127.0.0.10");
+		if(!inet_pton(AF_INET,addr,&(sdata.sin_addr)))
+		{
+			puts("address conversion error");
+			return 0;
+		}
+
+		//sdata.sin_addr.s_addr = inet_addr("10.32.5.249");//INADDR_ANY;
 		sdata.sin_port = htons(PSF);
 
 		//rand
 		bzero((char *)&srand, sizeof(srand));
 		srand.sin_family = AF_INET;
-		srand.sin_addr.s_addr = inet_addr("127.0.0.10");
+		if(!inet_pton(AF_INET,addr,&(srand.sin_addr)))
+		{
+			puts("address conversion error");
+			return 0;
+		}
+
+		//srand.sin_addr.s_addr = inet_addr("10.32.5.249");//INADDR_ANY;
 		srand.sin_port = htons(PRAND);
 
 		int cmd,data,rand;
