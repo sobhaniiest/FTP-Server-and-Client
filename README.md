@@ -1,6 +1,6 @@
 # FTP-Server-and-Client
 
-This is a simple implementation of passive mode ftp (File Transfer protocal) Server-Client.
+This is a simple implementation of passive mode ftp (File Transfer protocol) Server-Client.
 
 User-id - inro
 Password - joker
