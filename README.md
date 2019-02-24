@@ -4,7 +4,8 @@ This is a simple implementation of passive mode ftp (File Transfer protocol) Ser
 
 User-id - inro                                                                                                                 
 Password - joker                                                                                                               
-Commands - ls, pwd, put, get, cd, mkdir, bye                                                                                   This is currently baking for more commands!!!
+Commands - ls, pwd, put, get, cd, mkdir, bye                    
+This is currently baking for more commands!!!
 
 
 In passive mode FTP the client initiates both connections to the server, solving the problem of firewalls filtering the incoming data port connection to the client from the server. When opening an FTP connection, the client opens two random unprivileged ports locally (N > 1023 and N+1). The first port contacts the server on port 21, but instead of then issuing a PORT command and allowing the server to connect back to its data port, the client will issue the PASV command. The result of this is that the server then opens a random unprivileged port (P > 1023) and sends P back to the client in response to the PASV command. The client then initiates the connection from port N+1 to port P on the server to transfer data.
